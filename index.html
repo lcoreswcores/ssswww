@@ -198,10 +198,7 @@ const GITHUB_TOKEN = part1 + part2;
 }
 
 
-    // Функция автоматической отправки нового сообщения на GitHub
-    function publishPost() {
-        const text = document.getElementById('post-text').value.trim();
-        if (!text) return;
+          const apiFolderUrl = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/data.json`;
 
         const apiFolderUrl = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/data.json`;
         const now = new Date();
