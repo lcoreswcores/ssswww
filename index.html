@@ -116,15 +116,12 @@
 </div>
 
 <script>
-    const GITHUB_USER = 'lcoreswcores'; 
-    const GITHUB_REPO = 'ssswww';       
-    
     // ВСТАВЬ СВОИ ПОЛОВИНКИ ТОКЕНА СЮДА:
     const part1 = 'ghp_R1aYyDz5gXQIvnvx0'; 
     const part2 = 'Qn98PCmOEu7aB2J3vkI'; 
     const GITHUB_TOKEN = part1 + part2;
 
-    const ADMIN_PASS = 'wordssword'; 
+    const ADMIN_PASS = 'СЮДА_ТВОЙ_ПАРОЛЬ'; 
 
     const START_HOUR = 22; 
     const END_HOUR = 4;   
@@ -177,7 +174,7 @@
     }
 
     function loadBlog() {
-        const url = `https://githubusercontent.com{GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${Date.now()}`;
+        const url = 'https://githubusercontent.com' + Date.now();
         fetch(url)
             .then(res => res.json())
             .then(data => {
@@ -187,7 +184,7 @@
                 data.reverse().forEach(post => {
                     const postDiv = document.createElement('div');
                     postDiv.className = 'blog-post';
-                    postDiv.innerHTML = `<div class="blog-time">[${post.time}]</div><div>"${post.text}"</div>`;
+                    postDiv.innerHTML = '<div class="blog-time">[' + post.time + ']</div><div>"' + post.text + '"</div>';
                     container.appendChild(postDiv);
                 });
             })
@@ -198,12 +195,12 @@
         const text = document.getElementById('post-text').value.trim();
         if (!text) return;
 
-        const apiFolderUrl = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/data.json`;
+        const apiFolderUrl = 'https://github.com';
         const now = new Date();
-        const timestamp = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth()+1).padStart(2, '0')}.${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const timestamp = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth()+1).padStart(2, '0') + '.' + now.getFullYear() + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
         fetch(apiFolderUrl, {
-            headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+            headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
         })
         .then(res => res.json())
         .then(fileData => {
@@ -217,11 +214,11 @@
             return fetch(apiFolderUrl, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Authorization': 'token ' + GITHUB_TOKEN,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: `sys_log: узел обновлен [${timestamp}]`,
+                    message: 'sys_log: узел обновлен [' + timestamp + ']',
                     content: updatedContentBase64,
                     sha: sha
                 })
