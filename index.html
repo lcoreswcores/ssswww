@@ -126,20 +126,11 @@
     const START_HOUR = 22; 
     const END_HOUR = 4;   
 
-    function initSite() {
-        let control = (typeof SITE_CONTROL !== 'undefined') ? SITE_CONTROL : "OFF";
-        let shouldOpen = false;
-
-        if (control === "ON") shouldOpen = true;
-        else if (control === "OFF") shouldOpen = false;
-        else if (control === "SCHEDULE") {
-            const currentHour = new Date().getHours();
-            if (START_HOUR > END_HOUR) {
-                if (currentHour >= START_HOUR || currentHour < END_HOUR) shouldOpen = true;
-            } else {
-                if (currentHour >= START_HOUR && currentHour < END_HOUR) shouldOpen = true;
-            }
-        }
+        function initSite() {
+        document.getElementById('offline-screen').style.display = 'none';
+        document.getElementById('terminal-screen').style.display = 'block';
+        document.getElementById('page-body').className = 'terminal-style';
+    }
 
         if (shouldOpen) {
             document.getElementById('offline-screen').style.display = 'none';
