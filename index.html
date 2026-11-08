@@ -148,13 +148,14 @@
         }
     }
 
-    function checkKey() {
+      function checkKey() {
         const input = document.getElementById('key-input').value.trim();
         const error = document.getElementById('err-block');
         const secret = document.getElementById('secret-block');
         const form = document.getElementById('auth-form');
 
-        if (input === ADMIN_PASS) {
+        // Жёсткая проверка админа прямо по тексту:
+        if (input === 'wordssword') {
             error.style.display = 'none';
             form.style.display = 'none';
             secret.style.display = 'block';
@@ -163,6 +164,7 @@
             return;
         }
 
+        // Ключ для обычных игроков:
         if (input.toLowerCase() === 'aqapade') {
             error.style.display = 'none';
             form.style.display = 'none';
@@ -172,6 +174,7 @@
             error.style.display = 'block';
         }
     }
+
 
     function loadBlog() {
         const url = 'https://githubusercontent.com' + Date.now();
