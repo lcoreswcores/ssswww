@@ -93,21 +93,19 @@
         </div>
         <p id="err-block" style="color: #ff3333; display: none; margin-top: 10px; font-size: 11px;">[отклонено]</p>
 
-        <!-- Основной экран логов -->
         <div class="hidden-log" id="secret-block">
-            <p style="color: #ff6666;">>>> tsbs</p>
-            <p style="color: #ff6666;">>>> void (100%)</p>
+            <p style="color: #ff6666;">>>> [the._______.blocking.system]</p>
+            <p style="color: #ff6666;">>>> перехват контроля: void_hvte (100%)</p>
+            <p style="color: #ff6666;">>>> узел изолирован. статус: [offline]</p>
             
-            <p style="color: #888; margin-top: 20px; margin-bottom: 10px;">[логи]:</p>
+            <p style="color: #888; margin-top: 20px; margin-bottom: 10px;">[перехваченные логи системы]:</p>
             
-            <!-- ЛЕНТА БЛОГА С ТАЙМСТЕМПАМИ -->
             <div id="blog-container">
                 <p style="color: #666; font-style: italic;">Записей не обнаружено.</p>
             </div>
             
             <p style="color: #555; font-size: 11px; margin-top: 20px;">id: 02922</p>
             
-            <!-- СКРЫТАЯ АДМИНКА ДЛЯ ТЕБЯ -->
             <div id="admin-panel">
                 <p style="color: #00ff00; margin-bottom: 5px;">[панель записи узла]:</p>
                 <textarea id="post-text" placeholder="Введите новое сообщение в лог..."></textarea>
@@ -117,17 +115,16 @@
     </div>
 </div>
 
-    <script>
-    // ТОЧНАЯ КОНФИГУРАЦИЯ REPO ГИТХАБА:
+<script>
     const GITHUB_USER = 'lcoreswcores'; 
     const GITHUB_REPO = 'ssswww';       
     
-    // Твоя рабочая склейка токена по половинкам (впиши сюда свои живые части):
+    // ВСТАВЬ СВОИ ПОЛОВИНКИ ТОКЕНА СЮДА:
     const part1 = 'ghp_твоя_первая_половина'; 
     const part2 = 'твоя_вторая_половина'; 
     const GITHUB_TOKEN = part1 + part2;
 
-    const ADMIN_PASS = 'mysecretadmin77'; // Твой админ-пароль
+    const ADMIN_PASS = 'mysecretadmin77'; 
 
     const START_HOUR = 22; 
     const END_HOUR = 4;   
@@ -160,7 +157,6 @@
         const secret = document.getElementById('secret-block');
         const form = document.getElementById('auth-form');
 
-        // Вход для админа
         if (input === ADMIN_PASS) {
             error.style.display = 'none';
             form.style.display = 'none';
@@ -170,7 +166,6 @@
             return;
         }
 
-        // Вход для игроков
         if (input.toLowerCase() === 'aqapade') {
             error.style.display = 'none';
             form.style.display = 'none';
@@ -181,7 +176,6 @@
         }
     }
 
-    // Подгрузка логов из data.json
     function loadBlog() {
         const url = `https://githubusercontent.com{GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${Date.now()}`;
         fetch(url)
@@ -200,7 +194,6 @@
             .catch(err => console.error('Ошибка загрузки логов:', err));
     }
 
-    // Функция автоматической отправки нового сообщения на GitHub
     function publishPost() {
         const text = document.getElementById('post-text').value.trim();
         if (!text) return;
