@@ -115,31 +115,26 @@
 </div>
 
 <script>
-    const SITE_CONTROL = "ON"; 
-
+    // ВСТАВЬ СВОИ ПОЛОВИНКИ ТОКЕНА СЮДА:
     const part1 = 'ghp_R1aYyDz5gXQIvnvx0'; 
     const part2 = 'Qn98PCmOEu7aB2J3vkI'; 
     const GITHUB_TOKEN = part1 + part2;
 
     const ADMIN_PASS = 'wordssword'; 
 
-    const START_HOUR = 22; 
-    const END_HOUR = 4;   
-
-        function initSite() {
+    function initSite() {
         document.getElementById('offline-screen').style.display = 'none';
         document.getElementById('terminal-screen').style.display = 'block';
         document.getElementById('page-body').className = 'terminal-style';
     }
 
-      function checkKey() {
+    function checkKey() {
         const input = document.getElementById('key-input').value.trim();
         const error = document.getElementById('err-block');
         const secret = document.getElementById('secret-block');
         const form = document.getElementById('auth-form');
 
-        // Жёсткая проверка админа прямо по тексту:
-        if (input === 'wordssword') {
+        if (input === ADMIN_PASS) {
             error.style.display = 'none';
             form.style.display = 'none';
             secret.style.display = 'block';
@@ -148,7 +143,6 @@
             return;
         }
 
-        // Ключ для обычных игроков:
         if (input.toLowerCase() === 'aqapade') {
             error.style.display = 'none';
             form.style.display = 'none';
@@ -159,8 +153,6 @@
         }
     }
 
-
-       // Подгрузка логов из data.json с поддержкой русского языка
     function loadBlog() {
         const url = 'https://githubusercontent.com' + Date.now();
         fetch(url)
@@ -182,7 +174,6 @@
             .catch(err => console.error('Ошибка загрузки логов:', err));
     }
 
-    // Функция автоматической отправки нового сообщения на GitHub с фиксом кириллицы
     function publishPost() {
         const text = document.getElementById('post-text').value.trim();
         if (!text) return;
@@ -197,12 +188,10 @@
         .then(res => res.json())
         .then(fileData => {
             const sha = fileData.sha;
-            // Безопасное чтение кириллицы из Base64 гитхаба
             const currentContent = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
             
             currentContent.push({ time: timestamp, text: text });
             
-            // Безопасная кодировка кириллицы в Base64 перед отправкой
             const updatedContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
 
             return fetch(apiFolderUrl, {
@@ -229,6 +218,8 @@
         })
         .catch(err => console.error('Ошибка публикации:', err));
     }
+
+    initSite();
 </script>
 </body>
 </html>
