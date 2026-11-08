@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <style>
+        .offline-style {
+            background-color: #f0f0f0;
+            color: #333;
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            text-align: center;
+        }
+        .offline-msg { max-width: 500px; margin: 100px auto; }
+        
+        .terminal-style {
+            background-color: #0d0d0d;
+            color: #b0ffb0;
+            font-family: monospace;
+            padding: 15px;
+            margin: 0;
+        }
+        .terminal {
+            max-width: 550px;
+            margin: 40px auto;
+            border: 1px solid #333;
+            padding: 15px;
+        }
+        .input-area { margin-top: 20px; display: flex; gap: 10px; }
+        input, textarea { 
+            background: #000; 
+            border: 1px solid #444; 
+            color: #b0ffb0; 
+            padding: 4px; 
+            font-family: inherit; 
+            outline: none;
+        }
+        input { flex-grow: 1; }
+        textarea { width: 98%; height: 60px; resize: none; margin-bottom: 10px; }
+        button { 
+            background: #222; 
+            color: #b0ffb0; 
+            border: 1px solid #444; 
+            padding: 4px 12px; 
+            font-family: inherit; 
+            cursor: pointer; 
+        }
+        button:hover { background: #333; }
+        .hidden-log { 
+            display: none; 
+            border-top: 1px solid #333; 
+            margin-top: 15px; 
+            padding-top: 15px; 
+        }
+        .blog-post {
+            border-left: 2px solid #ff6666;
+            padding-left: 10px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        .blog-time {
+            color: #555;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+        #admin-panel {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px dashed #444;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body id="page-body" class="offline-style">
+
+<div id="offline-screen" class="offline-msg">
+    <h1 style="font-size: 50px; color: #aaa; margin-bottom: 10px;">Ничего не найдено</h1>
+    <p style="color: #666;">Не удается получить доступ к сайту. Проверьте правильность написания адреса или подключение к сети.</p>
+</div>
+
+<div id="terminal-screen" style="display: none;">
+    <div class="terminal" id="term-box">
+        <p>>>> s.</p>
+        <p>>>> active, good.</p>
+        <p>>>> w.</p>
+        <p style="color: #666;">-- Сеть доступна. Введите ключ... --</p>
+        
+        <div class="input-area" id="auth-form">
+            <input type="text" id="key-input" autocomplete="off">
+            <button onclick="checkKey()">></button>
+        </div>
+        <p id="err-block" style="color: #ff3333; display: none; margin-top: 10px; font-size: 11px;">[отклонено]</p>
+
+        <div class="hidden-log" id="secret-block">
+            <p style="color: #ff6666;">>>> [the._______.blocking.system]</p>
+            <p style="color: #ff6666;">>>> перехват контроля: void_hvte (100%)</p>
+            <p style="color: #ff6666;">>>> узел изолирован. статус: [offline]</p>
+            
+            <p style="color: #888; margin-top: 20px; margin-bottom: 10px;">[перехваченные логи системы]:</p>
+            
+            <div id="blog-container">
+                <p style="color: #666; font-style: italic;">Записей не обнаружено.</p>
+            </div>
+            
+            <p style="color: #555; font-size: 11px; margin-top: 20px;">id: 02922</p>
+            
+            <div id="admin-panel">
+                <p style="color: #00ff00; margin-bottom: 5px;">[панель записи узла]:</p>
+                <textarea id="post-text" placeholder="Введите новое сообщение в лог..."></textarea>
+                <button onclick="publishPost()">добавить запись</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ВСТАВЬ СВОИ ПОЛОВИНКИ ТОКЕНА СЮДА:
+    const part1 = 'ghp_твоя_первая_половина'; 
+    const part2 = 'твоя_вторая_половина'; 
+    const GITHUB_TOKEN = part1 + part2;
+
+    const ADMIN_PASS = 'wordssword'; 
+
+    function initSite() {
+        document.getElementById('offline-screen').style.display = 'none';
+        document.getElementById('terminal-screen').style.display = 'block';
+        document.getElementById('page-body').className = 'terminal-style';
+    }
+
+    function checkKey() {
+        const input = document.getElementById('key-input').value.trim();
+        const error = document.getElementById('err-block');
+        const secret = document.getElementById('secret-block');
+        const form = document.getElementById('auth-form');
+
+        if (input === ADMIN_PASS) {
+            error.style.display = 'none';
+            form.style.display = 'none';
+            secret.style.display = 'block';
+            document.getElementById('admin-panel').style.display = 'block';
+            loadBlog();
+            return;
+        }
+
+        if (input.toLowerCase() === 'aqapade') {
+            error.style.display = 'none';
+            form.style.display = 'none';
+            secret.style.display = 'block';
+            loadBlog();
+        } else {
+            error.style.display = 'block';
+        }
+    }
+
+    function loadBlog() {
+        const url = 'https://githubusercontent.com' + Date.now();
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('blog-container');
+                container.innerHTML = '';
+                if(data.length === 0) {
+                    container.innerHTML = '<p style="color: #666; font-style: italic;">Записей не обнаружено.</p>';
+                    return;
+                }
+                data.reverse().forEach(post => {
+                    const postDiv = document.createElement('div');
+                    postDiv.className = 'blog-post';
+                    postDiv.innerHTML = '<div class="blog-time">[' + post.time + ']</div><div>"' + post.text + '"</div>';
+                    container.appendChild(postDiv);
+                });
+            })
+            .catch(err => console.error('Ошибка загрузки логов:', err));
+    }
+
+    function publishPost() {
+        const text = document.getElementById('post-text').value.trim();
+        if (!text) return;
+
+        const apiFolderUrl = 'https://github.com';
+        const now = new Date();
+        const timestamp = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth()+1).padStart(2, '0') + '.' + now.getFullYear() + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+        fetch(apiFolderUrl, {
+            headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
+        })
+        .then(res => res.json())
+        .then(fileData => {
+            const sha = fileData.sha;
+            const currentContent = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+            
+            currentContent.push({ time: timestamp, text: text });
+            
+            const updatedContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
+
+            return fetch(apiFolderUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'token ' + GITHUB_TOKEN,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'sys_log: узел обновлен [' + timestamp + ']',
+                    content: updatedContentBase64,
+                    sha: sha
+                })
+            });
+        })
+        .then(res => {
+            if(res.ok) {
+                document.getElementById('post-text').value = '';
+                alert('Запись успешно запечатана в лог системы!');
+                setTimeout(loadBlog, 1500); 
+            } else {
+                alert('Ошибка записи. Проверь токен.');
+            }
+        })
+        .catch(err => console.error('Ошибка публикации:', err));
+    }
+
+    initSite();
+</script>
+</body>
+</html>
