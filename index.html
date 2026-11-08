@@ -181,7 +181,7 @@ const GITHUB_TOKEN = part1 + part2;
 
     // Подгрузка логов из data.json
     function loadBlog() {
-        const url = `https://githubusercontent.com{GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${Date.now()}`;
+        const url = `https://githubusercontent.com${GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${Date.now()}`;
         fetch(url)
             .then(res => res.json())
             .then(data => {
