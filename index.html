@@ -179,25 +179,24 @@ const GITHUB_TOKEN = part1 + part2;
         }
     }
 
-    // Подгрузка логов из data.json
-    function loadBlog() {
-        const url = `https://githubusercontent.com${GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${Date.now()}`;
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                const container = document.getElementById('blog-container');
-                if(data.length === 0) return;
-                container.innerHTML = '';
-                // Показываем посты (новые сверху)
-                data.reverse().forEach(post => {
-                    const postDiv = document.createElement('div');
-                    postDiv.className = 'blog-post';
-                    postDiv.innerHTML = `<div class="blog-time">[${post.time}]</div><div>"${post.text}"</div>`;
-                    container.appendChild(postDiv);
-                });
-            })
-            .catch(err => console.error('Ошибка загрузки логов:', err));
-    }
+  function loadBlog() {
+    const url = `https://githubusercontent.com{GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${Date.now()}`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('blog-container');
+            if(data.length === 0) return;
+            container.innerHTML = '';
+            data.reverse().forEach(post => {
+                const postDiv = document.createElement('div');
+                postDiv.className = 'blog-post';
+                postDiv.innerHTML = `<div class="blog-time">[${post.time}]</div><div>"${post.text}"</div>`;
+                container.appendChild(postDiv);
+            });
+        })
+        .catch(err => console.error('Ошибка загрузки логов:', err));
+}
+
 
     // Функция автоматической отправки нового сообщения на GitHub
     function publishPost() {
