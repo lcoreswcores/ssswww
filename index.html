@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ошибка 404: Страница не найдена</title>
-    <!-- ПОД КЛЮЧАЕМ НАШ ФАЙЛ ПЕРЕКЛЮЧАТЕЛЬ -->
     <script src="status.js"></script>
     <style>
         .offline-style {
@@ -15,74 +14,93 @@
             text-align: center;
         }
         .offline-msg { max-width: 500px; margin: 100px auto; }
+        
+        /* Простой, не пафосный терминал */
         .terminal-style {
-            background-color: #000000;
-            color: #00ff00;
-            font-family: "Courier New", Courier, monospace;
-            padding: 20px;
+            background-color: #0d0d0d;
+            color: #b0ffb0; /* Чуть менее ядовитый зеленый, более старый */
+            font-family: monospace;
+            padding: 15px;
             margin: 0;
         }
         .terminal {
-            max-width: 600px;
-            margin: 50px auto;
-            border: 1px dashed #00ff00;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            max-width: 550px;
+            margin: 40px auto;
+            border: 1px solid #333; /* Простая серая рамка вместо светящейся */
+            padding: 15px;
         }
-        .input-area { margin-top: 30px; display: flex; gap: 10px; }
-        input, textarea { background: #000; border: 1px solid #00ff00; color: #00ff00; padding: 5px; font-family: inherit; }
-        input { flex-grow: 1; }
-        button { background: #00ff00; color: #000; border: none; padding: 5px 15px; font-family: inherit; cursor: pointer; font-weight: bold; }
-        .hidden-log { display: none; color: #ff0000; border-top: 1px double #ff0000; margin-top: 20px; padding-top: 20px; }
-        #admin-panel { display: none; margin-top: 30px; border-top: 1px dashed #00ff00; padding-top: 20px; }
+        .input-area { margin-top: 20px; display: flex; gap: 10px; }
+        input { 
+            background: #000; 
+            border: 1px solid #444; 
+            color: #b0ffb0; 
+            padding: 4px; 
+            font-family: inherit; 
+            flex-grow: 1; 
+            outline: none;
+        }
+        button { 
+            background: #222; 
+            color: #b0ffb0; 
+            border: 1px solid #444; 
+            padding: 4px 12px; 
+            font-family: inherit; 
+            cursor: pointer; 
+        }
+        button:hover { background: #333; }
+        .hidden-log { 
+            display: none; 
+            color: #ff6666; 
+            border-top: 1px solid #333; 
+            margin-top: 15px; 
+            padding-top: 15px; 
+        }
     </style>
 </head>
 <body id="page-body" class="offline-style">
 
-<!-- ТЕКСТ ОШИБКИ БРАУЗЕРА -->
+<!-- ЭКРАН ОШИБКИ БРАУЗЕРА -->
 <div id="offline-screen" class="offline-msg">
     <h1 style="font-size: 50px; color: #aaa; margin-bottom: 10px;">Ничего не найдено</h1>
     <p style="color: #666;">Не удается получить доступ к сайту. Проверьте правильность написания адреса или подключение к сети.</p>
 </div>
 
-<!-- ХАКЕРСКИЙ ТЕРМИНАЛ -->
+<!-- МИНИМАЛИСТИЧНЫЙ ТЕРМИНАЛ -->
 <div id="terminal-screen" style="display: none;">
     <div class="terminal" id="term-box">
-        <h1 style="font-size: 18px; text-align: center; text-transform: uppercase;">[ NETWORK MONITOR: CORE_SYS ]</h1>
-        <p>>> Клан sishsvw обнаружил критическую уязвимость в вашей сети.</p>
-        <p>>> Синхронизация локальных узлов завершена успешно.</p>
-        <p>>> Статус: [КОНСПИРАЦИЯ_АКТИВНА]</p>
-        <p style="color: #888;">-- Сеть доступна. Введите ключ дешифровки... --</p>
+        <p>>>> s.</p>
+        <p>>>> active, good.</p>
+        <p>>>> w.</p>
+        <p style="color: #666;">-- Сеть доступна. Введите ключ... --</p>
         
         <div class="input-area" id="auth-form">
-            <input type="text" id="key-input" placeholder="Ключ авторизации..." autocomplete="off">
-            <button onclick="checkKey()">ВВОД</button>
+            <input type="text" id="key-input" autocomplete="off">
+            <button onclick="checkKey()">></button>
         </div>
-        <p id="err-block" style="color: #ff3333; display: none; margin-top: 10px; font-size: 12px;">ОШИБКА: Неверный ключ.</p>
+        <p id="err-block" style="color: #ff3333; display: none; margin-top: 10px; font-size: 11px;">[отклонено]</p>
 
+        <!-- Блок логов (открывается по ключу aqapade) -->
         <div class="hidden-log" id="secret-block">
-            <p style="font-weight: bold;">>>> [ВЗЛОМ ТЕРМИНАЛА THE._______.BLOCKING.SYSTEM] <<<</p>
-            <p>>>> Перехват контроля над узлом VOID_HVTE — 100%</p>
-            <p>>>> Узел принудительно изолирован. Входящие пакеты отброшены.</p>
-            <p>>>> Уведомления пользователя: [ОТКЛЮЧЕНЫ_НАВСЕГДА]</p>
+            <p>>>> [the._______.blocking.system]</p>
+            <p>>>> перехват контроля: void_hvte (100%)</p>
+            <p>>>> узел изолирован. пакеты отброшены.</p>
+            <p>>>> статус: [offline]</p>
             
-            <p style="color: #ff6666; margin-top: 20px;">[ДИНАМИЧЕСКИЙ ЛОГ СИСТЕМЫ]:</p>
-            <div id="dynamic-logs-output" style="color: #fff; font-style: italic;">
-                "st_rlvst, если ты это читаешь, они реально пасут этот сервер... я ухожу в офлайн..."
+            <p style="color: #888; margin-top: 15px;">[извлеченный след]:</p>
+            <div id="dynamic-logs-output" style="color: #fff;">
+                "st_rlvst, они реально пасут этот сервер... у меня всё виснет. Ищите зацепку в..."
             </div>
             
-            <p style="color: #888; font-size: 11px; margin-top: 30px;">Идентификатор уцелевшего узла: 02922</p>
+            <p style="color: #555; font-size: 11px; margin-top: 20px;">id: 02922</p>
         </div>
     </div>
 </div>
 
 <script>
-    // Настройка ночных часов (если выбран режим SCHEDULE)
     const START_HOUR = 22; 
     const END_HOUR = 4;   
 
     function initSite() {
-        // Проверяем, загрузился ли переключатель. Если файла нет, по дефолту включаем скрытность (OFF)
         let control = (typeof SITE_CONTROL !== 'undefined') ? SITE_CONTROL : "OFF";
         let shouldOpen = false;
 
@@ -103,7 +121,7 @@
             document.getElementById('offline-screen').style.display = 'none';
             document.getElementById('terminal-screen').style.display = 'block';
             document.getElementById('page-body').className = 'terminal-style';
-            document.title = "SYS_ERR: HOST_NOT_FOUND";
+            document.title = "index";
         }
     }
 
@@ -112,22 +130,16 @@
         const error = document.getElementById('err-block');
         const secret = document.getElementById('secret-block');
         const form = document.getElementById('auth-form');
-        const box = document.getElementById('term-box');
 
         if (input.toLowerCase() === 'aqapade') {
             error.style.display = 'none';
             form.style.display = 'none';
             secret.style.display = 'block';
-            box.style.borderColor = '#ff0000';
-            box.style.color = '#ff0000';
-            box.style.boxShadow = '0 0 15px rgba(255, 0, 0, 0.4)';
-            document.title = "SYS_ALERT: INTRUDER_DETECTED";
         } else {
             error.style.display = 'block';
         }
     }
 
-    // Запуск проверки при загрузке страницы
     initSite();
 </script>
 </body>
