@@ -117,15 +117,17 @@
     </div>
 </div>
 
-<script>
-    const GITHUB_USER = 'lcoreswcores';
-    const GITHUB_REPO = 'ssswww';
-  
-const part1 = 'ghp_HfNskZ8AUk472'; 
-const part2 = 'rstNyd7WErXklFpmj2tQuBn'; 
-const GITHUB_TOKEN = part1 + part2;
+    <script>
+    // ТОЧНАЯ КОНФИГУРАЦИЯ REPO ГИТХАБА:
+    const GITHUB_USER = 'lcoreswcores'; 
+    const GITHUB_REPO = 'ssswww';       
+    
+    // Твоя рабочая склейка токена по половинкам (впиши сюда свои живые части):
+    const part1 = 'ghp_твоя_первая_половина'; 
+    const part2 = 'твоя_вторая_половина'; 
+    const GITHUB_TOKEN = part1 + part2;
 
-    const ADMIN_PASS = 'myswordnotsword'; 
+    const ADMIN_PASS = 'mysecretadmin77'; // Твой админ-пароль
 
     const START_HOUR = 22; 
     const END_HOUR = 4;   
@@ -179,33 +181,34 @@ const GITHUB_TOKEN = part1 + part2;
         }
     }
 
-  function loadBlog() {
-    const url = `https://githubusercontent.com{GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${Date.now()}`;
-    fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            const container = document.getElementById('blog-container');
-            if(data.length === 0) return;
-            container.innerHTML = '';
-            data.reverse().forEach(post => {
-                const postDiv = document.createElement('div');
-                postDiv.className = 'blog-post';
-                postDiv.innerHTML = `<div class="blog-time">[${post.time}]</div><div>"${post.text}"</div>`;
-                container.appendChild(postDiv);
-            });
-        })
-        .catch(err => console.error('Ошибка загрузки логов:', err));
-}
+    // Подгрузка логов из data.json
+    function loadBlog() {
+        const url = `https://githubusercontent.com{GITHUB_USER}/${GITHUB_REPO}/main/data.json?t=${Date.now()}`;
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('blog-container');
+                if(data.length === 0) return;
+                container.innerHTML = '';
+                data.reverse().forEach(post => {
+                    const postDiv = document.createElement('div');
+                    postDiv.className = 'blog-post';
+                    postDiv.innerHTML = `<div class="blog-time">[${post.time}]</div><div>"${post.text}"</div>`;
+                    container.appendChild(postDiv);
+                });
+            })
+            .catch(err => console.error('Ошибка загрузки логов:', err));
+    }
 
-
-          const apiFolderUrl = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/data.json`;
+    // Функция автоматической отправки нового сообщения на GitHub
+    function publishPost() {
+        const text = document.getElementById('post-text').value.trim();
+        if (!text) return;
 
         const apiFolderUrl = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/data.json`;
         const now = new Date();
-        // Форматируем время в красивый лог: ДД.ММ.ГГГГ ЧЧ:ММ
         const timestamp = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth()+1).padStart(2, '0')}.${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-        // 1. Получаем текущую базу данных и её SHA-хеш
         fetch(apiFolderUrl, {
             headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
         })
@@ -214,13 +217,10 @@ const GITHUB_TOKEN = part1 + part2;
             const sha = fileData.sha;
             const currentContent = JSON.parse(atob(fileData.content));
             
-            // Добавляем новую запись
             currentContent.push({ time: timestamp, text: text });
             
-            // Переводим в Base64 для гитхаба
             const updatedContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
 
-            // 2. Отправляем обновленный файл обратно
             return fetch(apiFolderUrl, {
                 method: 'PUT',
                 headers: {
@@ -238,7 +238,7 @@ const GITHUB_TOKEN = part1 + part2;
             if(res.ok) {
                 document.getElementById('post-text').value = '';
                 alert('Запись успешно запечатана в лог системы!');
-                setTimeout(loadBlog, 2000); // Перезагружаем ленту
+                setTimeout(loadBlog, 2000); 
             } else {
                 alert('Ошибка записи. Проверь токен.');
             }
