@@ -132,12 +132,6 @@
         document.getElementById('page-body').className = 'terminal-style';
     }
 
-        if (shouldOpen) {
-            document.getElementById('offline-screen').style.display = 'none';
-            document.getElementById('terminal-screen').style.display = 'block';
-            document.getElementById('page-body').className = 'terminal-style';
-        }
-
       function checkKey() {
         const input = document.getElementById('key-input').value.trim();
         const error = document.getElementById('err-block');
