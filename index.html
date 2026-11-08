@@ -176,14 +176,18 @@
     }
 
 
+       // Подгрузка логов из data.json с поддержкой русского языка
     function loadBlog() {
-       const url = 'https://raw.githubusercontent.com/lcoreswcores/ssswww/main/data.json?t='+Date.now();
+        const url = 'https://githubusercontent.com' + Date.now();
         fetch(url)
             .then(res => res.json())
             .then(data => {
                 const container = document.getElementById('blog-container');
-                if(data.length === 0) return;
                 container.innerHTML = '';
+                if(data.length === 0) {
+                    container.innerHTML = '<p style="color: #666; font-style: italic;">Записей не обнаружено.</p>';
+                    return;
+                }
                 data.reverse().forEach(post => {
                     const postDiv = document.createElement('div');
                     postDiv.className = 'blog-post';
@@ -194,11 +198,12 @@
             .catch(err => console.error('Ошибка загрузки логов:', err));
     }
 
+    // Функция автоматической отправки нового сообщения на GitHub с фиксом кириллицы
     function publishPost() {
         const text = document.getElementById('post-text').value.trim();
         if (!text) return;
 
-        const apiFolderUrl = 'https://api.github.com/repos/lcoreswcores/ssswww/contents/data.json';
+        const apiFolderUrl = 'https://github.com';
         const now = new Date();
         const timestamp = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth()+1).padStart(2, '0') + '.' + now.getFullYear() + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
@@ -208,10 +213,12 @@
         .then(res => res.json())
         .then(fileData => {
             const sha = fileData.sha;
-            const currentContent = JSON.parse(atob(fileData.content));
+            // Безопасное чтение кириллицы из Base64 гитхаба
+            const currentContent = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
             
             currentContent.push({ time: timestamp, text: text });
             
+            // Безопасная кодировка кириллицы в Base64 перед отправкой
             const updatedContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2))));
 
             return fetch(apiFolderUrl, {
@@ -231,15 +238,13 @@
             if(res.ok) {
                 document.getElementById('post-text').value = '';
                 alert('Запись успешно запечатана в лог системы!');
-                setTimeout(loadBlog, 2000); 
+                setTimeout(loadBlog, 1500); 
             } else {
                 alert('Ошибка записи. Проверь токен.');
             }
         })
         .catch(err => console.error('Ошибка публикации:', err));
     }
-
-    initSite();
 </script>
 </body>
 </html>
